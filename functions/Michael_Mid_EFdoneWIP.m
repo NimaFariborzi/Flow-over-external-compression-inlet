@@ -287,14 +287,14 @@ function [E, F] = calc_EF_pred(U,u,v,P,T,cp,Pr,d_xi,d_et,xi_x,et_x,et_y,xi_y)
     mu = sutherland(T);
     k = mu*cp/Pr;
     % Calculate normal stresses
-    tau_xx = mu.*(4/3*(ddxi_bwd(u,d_xi).*xi_x + ddet_central(u,d_et).*et_x)-2/3*(ddet_central(v,d_et).*et_y + ddxi_bwd(v,d_xi).*xi_y));            
-    tau_yy = mu.*(4/3*(ddet_bwd(v,d_et).*et_y + ddxi_central(v,d_xi).*xi_y)-2/3*(ddxi_central(u,d_xi).*xi_x + ddet_bwd(u,d_et).*et_x));            
+    tau_xx = mu.*(4/3*ddx(u,xi_x,et_x,d_xi,d_et,'bwd','cnt') - 2/3*ddy(v,xi_y,et_y,d_xi,d_et,'bwd','cnt'));
+    tau_yy = mu.*(4/3*ddy(v,xi_y,et_y,d_xi,d_et,'cnt','bwd') - 2/3*ddx(u,xi_x,et_x,d_xi,d_et,'cnt','bwd')); 
     % Calculate shear stresses (different for E and F due to finite differences)
-    tau_xy_E = mu.*(ddet_central(u,d_et).*et_y + ddxi_bwd(v,d_xi).*xi_x + ddxi_bwd(u,d_xi).*xi_y  +ddet_central(v,d_et).*et_x);                   
-    tau_xy_F = mu.*(ddxi_central(v,d_xi).*xi_x + ddet_bwd(u,d_et).*et_y + ddxi_central(u,d_xi).*xi_y+ddet_bwd(v,d_et).*et_x);                 
+    tau_xy_E = mu.*(ddy(u,xi_y,et_y,d_xi,d_et,'bwd','cnt') + ddx(v,xi_x,et_x,d_xi,d_et,'bwd','cnt'));
+    tau_xy_F = mu.*(ddx(v,xi_x,et_x,d_xi,d_et,'cnt','bwd') + ddy(u,xi_y,et_y,d_xi,d_et,'cnt','bwd'));
     % Calculate heat fluxes
-    q_x = -k.*(ddxi_bwd(T,d_xi).*xi_x+ddet_central(T,d_et).*et_x);                                                      
-    q_y = -k.*(ddet_bwd(T,d_et).*et_y+ddxi_central(T,d_xi).*xi_y);                                                     
+    q_x = -k.*ddx(T,xi_x,et_x,d_xi,d_et,'bwd','cnt');
+    q_y = -k.*ddy(T,xi_y,et_y,d_xi,d_et,'cnt','bwd');
     % First slice
     E(1,:,:) = U(2,:,:);
     F(1,:,:) = U(3,:,:);
@@ -319,14 +319,14 @@ function [E, F] = calc_EF_corr(U,u,v,P,T,cp,Pr,d_xi,d_et,xi_x,et_x,et_y,xi_y)
     mu = sutherland(T);
     k = mu*cp/Pr;
     % Calculate normal stresses
-    tau_xx = mu.*(4/3*(ddxi_fwd(u,d_xi).*xi_x + ddet_central(u,d_et).*et_x)-2/3*(ddet_central(v,d_et).*et_y + ddxi_fwd(v,d_xi).*xi_y));            
-    tau_yy = mu.*(4/3*(ddet_fwd(v,d_et).*et_y + ddxi_central(v,d_xi).*xi_y)-2/3*(ddxi_central(u,d_xi).*xi_x + ddet_fwd(u,d_et).*et_x)); 
+    tau_xx = mu.*(4/3*ddx(u,xi_x,et_x,d_xi,d_et,'fwd','cnt') - 2/3*ddy(v,xi_y,et_y,d_xi,d_et,'fwd','cnt'));
+    tau_yy = mu.*(4/3*ddy(v,xi_y,et_y,d_xi,d_et,'cnt','fwd') - 2/3*ddx(u,xi_x,et_x,d_xi,d_et,'cnt','fwd'));
     % Calculate shear stresses (different for E and F due to finite differences)
-    tau_xy_E = mu.*(ddet_central(u,d_et).*et_y + ddxi_fwd(v,d_xi).*xi_x + ddxi_fwd(u,d_xi).*xi_y  +ddet_central(v,d_et).*et_x);                   
-    tau_xy_F = mu.*(ddxi_central(v,d_xi).*xi_x + ddet_fwd(u,d_et).*et_y + ddxi_central(u,d_xi).*xi_y+ddet_fwd(v,d_et).*et_x); 
+     tau_xy_E = mu.*(ddy(u,xi_y,et_y,d_xi,d_et,'fwd','cnt') + ddx(v,xi_x,et_x,d_xi,d_et,'fwd','cnt'));
+    tau_xy_F = mu.*(ddx(v,xi_x,et_x,d_xi,d_et,'cnt','fwd') + ddy(u,xi_y,et_y,d_xi,d_et,'cnt','fwd'));
     % Calculate heat fluxes
-    q_x = -k.*(ddxi_fwd(T,d_xi).*xi_x+ddet_central(T,d_et).*et_x);                                                      
-    q_y = -k.*(ddet_fwd(T,d_et).*et_y+ddxi_central(T,d_xi).*xi_y);    
+    q_x = -k.*ddx(T,xi_x,et_x,d_xi,d_et,'fwd','cnt');
+    q_y = -k.*ddy(T,xi_y,et_y,d_xi,d_et,'cnt','fwd');
     % First slice
     E(1,:,:) = U(2,:,:);
     F(1,:,:) = U(3,:,:);
