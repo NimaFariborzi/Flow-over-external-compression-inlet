@@ -1,94 +1,10 @@
 %% Midterm Part 1: Supersonic Flow over Flat Plate
-
-%% grid generation
 clc; clear; close all
 
-% Use my functions
-addpath('./functions')
+% Load mesh and metrics
+load('../test_mesh.mat')
+load('../test_mesh_metrics.mat')
 
-%Generate the grid
-% ======================== %
-% GRID PARAMETERS          %
-% ======================== %
-
-% Distances
-x1_dist = 1e-5; % Length of domain
-y1_dist = 8e-6; % Height of domain
-
-% Grid spacing
-nx = 75;
-ny = 80;
-
-% Grid stretching
-alpha_y = 0.7;
-
-% ======================== %
-% BLOCK CONSTRUCTION       %
-% ======================== %
-
-% computational grid
-xi = linspace(0,1e-5,nx);
-et = linspace(0,8e-6,ny);
-[XI, ET] = ndgrid(xi,et);
-
-d_xi = xi(2) - xi(1);
-d_et = et(2) - et(1);
-
-% physical grid
-X = XI;
-Y = zeros(size(ET));
-
-for i = 1:nx
-    Y(i,:) = OneWayBiasY(Y(i,:),0,y1_dist,alpha_y);
-end
-
-% Plot
-tiledlayout(1,2)
-% Computational grid
-nexttile
-plot(XI(:),ET(:),'.','MarkerSize',15)
-title('Computational Grid')
-xlabel('$\xi$')
-ylabel('$\eta$')
-axis equal tight
-% Physical grid
-nexttile
-plot(X(:),Y(:),'.','MarkerSize',15)
-title('Physical Grid')
-xlabel('$x$')
-ylabel('$y$')
-axis equal tight
-
-save('midterm_transformed_mesh.mat','XI','ET','X','Y','d_xi','d_et')
-%% Get metrics
-
-% Load mesh and functions
-load('midterm_transformed_mesh.mat')
-addpath('./functions/')
-
-% TODO: HANDLE ONE-SIDED DIFFERENCES ABOVE/BELOW INTAKE WALL
-
-% Calculate inverse metrics
-x_xi = ddxi_central(X,d_xi);
-y_xi = ddxi_central(Y,d_xi);
-x_et = ddet_central(X,d_et);
-y_et = ddet_central(Y,d_et);
-
-% Calcualte Jacobian
-J = x_xi.*y_et - x_et.*y_xi;
-
-% Calculate metrics
-xi_x =  y_et./J;
-et_x = -y_xi./J;
-xi_y = -x_et./J;
-et_y =  x_xi./J;
-
-% Export results
-save('midterm_transformed_mesh_metrics.mat','x_xi','y_xi','x_et','y_et','xi_x','et_x','xi_y','et_y','J')
-
-%% 
-
-load('midterm_transformed_mesh_metrics.mat')
 % Define parameters
 M_inf = 4;
 T_inf = 288.15; % K, STP
