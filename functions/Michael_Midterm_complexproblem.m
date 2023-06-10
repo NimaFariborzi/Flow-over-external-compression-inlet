@@ -39,6 +39,11 @@ T(:,:) = T_inf;
 % Apply BC's
 [u, v, P, T, U] = apply_BCs(u, v, P, T, R, cv, u_inf, P_inf, T_inf, ...
                             AdiabaticWallFlag);
+%Nima:I'm not sure if we need to apply the U=u*J condition here
+% for e=1:4
+%     U(e,:,:)=squeeze(U(e,:,:))./J;
+% end
+                            
 [~,~,~,~,~,e,~] = cons2prim(U,R,cv); % Get e for plotting
 
 % Visualization parameters
