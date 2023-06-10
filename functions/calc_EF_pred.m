@@ -1,9 +1,6 @@
 % Function to calculate the values of E and F to be used during predictor step
 % calculations
-function [E, F] = calc_EF_pred(U,u,v,P,T,cp,Pr,dx,dy)
-
-    % NEEDS MODIFICATION
-
+function [E, F] = calc_EF_pred(U,u,v,P,T,cp,Pr,d_xi,d_et,xi_x,et_x,et_y,xi_y)
     % Allocate E and F
     E = zeros(size(U));
     F = zeros(size(U));
@@ -11,14 +8,14 @@ function [E, F] = calc_EF_pred(U,u,v,P,T,cp,Pr,dx,dy)
     mu = sutherland(T);
     k = mu*cp/Pr;
     % Calculate normal stresses
-    tau_xx = mu.*(4/3*ddxi_bwd(u,dx) - 2/3*ddet_central(v,dy));
-    tau_yy = mu.*(4/3*ddet_bwd(v,dy) - 2/3*ddxi_central(u,dx));
+    tau_xx = mu.*(4/3*ddx(u,xi_x,et_x,d_xi,d_et,'bwd','cnt') - 2/3*ddy(v,xi_y,et_y,d_xi,d_et,'bwd','cnt'));
+    tau_yy = mu.*(4/3*ddy(v,xi_y,et_y,d_xi,d_et,'cnt','bwd') - 2/3*ddx(u,xi_x,et_x,d_xi,d_et,'cnt','bwd')); 
     % Calculate shear stresses (different for E and F due to finite differences)
-    tau_xy_E = mu.*(ddet_central(u,dy) + ddxi_bwd(v,dx));
-    tau_xy_F = mu.*(ddxi_central(v,dx) + ddet_bwd(u,dy));
+    tau_xy_E = mu.*(ddy(u,xi_y,et_y,d_xi,d_et,'bwd','cnt') + ddx(v,xi_x,et_x,d_xi,d_et,'bwd','cnt'));
+    tau_xy_F = mu.*(ddx(v,xi_x,et_x,d_xi,d_et,'cnt','bwd') + ddy(u,xi_y,et_y,d_xi,d_et,'cnt','bwd'));
     % Calculate heat fluxes
-    q_x = -k.*ddxi_bwd(T,dx);
-    q_y = -k.*ddet_bwd(T,dy);
+    q_x = -k.*ddx(T,xi_x,et_x,d_xi,d_et,'bwd','cnt');
+    q_y = -k.*ddy(T,xi_y,et_y,d_xi,d_et,'cnt','bwd');
     % First slice
     E(1,:,:) = U(2,:,:);
     F(1,:,:) = U(3,:,:);
