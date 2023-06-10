@@ -123,11 +123,6 @@ T(:,:) = T_inf;
 % Apply BC's
 [u, v, P, T, U] = apply_BCs(u, v, P, T, R, cv, u_inf, P_inf, T_inf, ...
                             AdiabaticWallFlag);
-%not 100% sure if we need to get U script here
-for e=1:4
-    U(e,:,:)=squeeze(U(e,:,:)).*J;
-end
-                            
 [~,~,~,~,~,e,~] = cons2prim(U,R,cv); % Get e for plotting
 
 % Visualization parameters
@@ -236,6 +231,7 @@ conv_line = animatedline;
 
 drawnow
 U_old = U;
+
 for i = 1:num_steps
     % Increment time
     t = t + dt;
@@ -246,18 +242,17 @@ for i = 1:num_steps
     Epsilon = zeros(size(E));
     Phi = zeros(size(F));
     for e=1:4
-          
           Epsilon(e,:,:)=squeeze(E(e,:,:)).*y_et - x_et.*squeeze(F(e,:,:));
           Phi(e,:,:)=-y_xi.*squeeze(E(e,:,:)) + x_xi.*squeeze(F(e,:,:));
     end
-    %get U script
+    % Get script U
     for e=1:4
-        U(e,:,:)=squeeze(U(e,:,:)).*J;
+    Upsilon(e,:,:)=J.*squeeze(U(e,:,:));
     end
-    % Calculate U_pred
-    U_pred = U + dt*(-ddxi_fwd_3(Epsilon,d_xi) - ddet_fwd_3(Phi,d_et));
+    % Calculate Upsilon_pred
+    Upsilon_pred = Upsilon + dt*(-ddxi_fwd_3(Epsilon,d_xi) - ddet_fwd_3(Phi,d_et));
     for e=1:4
-        U_pred(e,:,:)=squeeze(U_pred(e,:,:)).*J;
+        U_pred(e,:,:)=squeeze(Upsilon_pred(e,:,:))./J;
     end
     % Get required primitive variables back from U_pred
     [~, u_pred, v_pred, T_pred, P_pred, ~, ~] = cons2prim(U_pred,R,cv);
@@ -276,14 +271,11 @@ for i = 1:num_steps
           Epsilon_pred(e,:,:)=squeeze(E_pred(e,:,:)).*y_et - x_et.*squeeze(F_pred(e,:,:));
           Phi_pred(e,:,:)=-y_xi.*squeeze(E_pred(e,:,:)) + x_xi.*squeeze(F_pred(e,:,:));
     end
-    %Get U_pred Script
-    for e=1:4
-        U_pred(e,:,:)=squeeze(U_pred(e,:,:)).*J;
-    end
+    
     % Calculate U
-    U = 0.5*(U + U_pred) + dt/2*(-ddxi_bwd_3(Epsilon_pred,d_xi) - ddet_bwd_3(Phi_pred,d_et));
+    Upsilon = 0.5*(Upsilon + Upsilon_pred) + dt/2*(-ddxi_bwd_3(Epsilon_pred,d_xi) - ddet_bwd_3(Phi_pred,d_et));
     for e=1:4
-        U(e,:,:)=squeeze(U(e,:,:)).*J;
+        U(e,:,:)=squeeze(Upsilon(e,:,:))./J;
     end
     
     % Get required primitive variables back from U
