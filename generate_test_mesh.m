@@ -20,15 +20,15 @@ alpha_y = 0.7;
 % ======================== %
 
 % computational grid
-xi = linspace(0,1,nx);
-et = linspace(0,1,ny);
+xi = linspace(0,1e-5,nx);
+et = linspace(0,8e-6,ny);
 [XI, ET] = ndgrid(xi,et);
 
 d_xi = xi(2) - xi(1);
 d_et = et(2) - et(1);
 
 % physical grid
-X = XI*x1_dist;
+X = XI;
 Y = zeros(size(ET));
 
 for i = 1:nx
