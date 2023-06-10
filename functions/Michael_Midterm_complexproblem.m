@@ -246,11 +246,13 @@ for i = 1:num_steps
           Phi(e,:,:)=-y_xi.*squeeze(E(e,:,:)) + x_xi.*squeeze(F(e,:,:));
     end
     % Get script U
+    Upsilon=zeros(4,nx,ny);
     for e=1:4
     Upsilon(e,:,:)=J.*squeeze(U(e,:,:));
     end
     % Calculate Upsilon_pred
     Upsilon_pred = Upsilon + dt*(-ddxi_fwd_3(Epsilon,d_xi) - ddet_fwd_3(Phi,d_et));
+    U_pred=zeros(4,nx,ny);
     for e=1:4
         U_pred(e,:,:)=squeeze(Upsilon_pred(e,:,:))./J;
     end
