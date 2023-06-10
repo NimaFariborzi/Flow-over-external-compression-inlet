@@ -1,9 +1,12 @@
 %% Midterm Part 1: Supersonic Flow over Flat Plate
 clc; clear; close all
 
+% Load functions
+addpath('./functions/')
+
 % Load mesh and metrics
-load('../test_mesh.mat')
-load('../test_mesh_metrics.mat')
+load('./test_mesh.mat')
+load('./test_mesh_metrics.mat')
 
 % Define parameters
 M_inf = 4;
