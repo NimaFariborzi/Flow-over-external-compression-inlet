@@ -31,6 +31,14 @@ v = zeros(nx,ny); % y-velocity
 P = zeros(nx,ny); % pressure
 T = zeros(nx,ny); % temperature
 
+% Allocate intermediate arrays
+Eps      = zeros(4,nx,ny);
+Phi      = zeros(4,nx,ny);
+Upsilon  = zeros(4,nx,ny);
+U_pred   = zeros(4,nx,ny);
+Eps_pred = zeros(4,nx,ny);
+Phi_pred = zeros(4,nx,ny);
+
 % Set initial conditions via primitives
 u(:,:) = u_inf;
 P(:,:) = P_inf;
@@ -39,10 +47,6 @@ T(:,:) = T_inf;
 % Apply BC's
 [u, v, P, T, U] = apply_BCs(u, v, P, T, R, cv, u_inf, P_inf, T_inf, ...
                             AdiabaticWallFlag);
-%Nima:I'm not sure if we need to apply the U=u*J condition here
-% for e=1:4
-%     U(e,:,:)=squeeze(U(e,:,:))./J;
-% end
                             
 [~,~,~,~,~,e,~] = cons2prim(U,R,cv); % Get e for plotting
 
@@ -160,22 +164,18 @@ for i = 1:num_steps
     % Get value of E and F
     [E, F] = calc_EF_pred(U,u,v,P,T,cp,Pr,d_xi,d_et,xi_x,et_x,et_y,xi_y);
     % Get script E and F
-    Epsilon = zeros(size(E));
-    Phi = zeros(size(F));
-    for e=1:4
-          Epsilon(e,:,:)=squeeze(E(e,:,:)).*y_et - x_et.*squeeze(F(e,:,:));
-          Phi(e,:,:)=-y_xi.*squeeze(E(e,:,:)) + x_xi.*squeeze(F(e,:,:));
+    for j = 1:4
+          Eps(j,:,:)=  y_et.*squeeze(E(j,:,:)) - x_et.*squeeze(F(j,:,:));
+          Phi(j,:,:)= -y_xi.*squeeze(E(j,:,:)) + x_xi.*squeeze(F(j,:,:));
     end
     % Get script U
-    Upsilon=zeros(4,nx,ny);
-    for e=1:4
-    Upsilon(e,:,:)=J.*squeeze(U(e,:,:));
+    for j = 1:4
+        Upsilon(j,:,:)= J.*squeeze(U(j,:,:));
     end
     % Calculate Upsilon_pred
-    Upsilon_pred = Upsilon + dt*(-ddxi_fwd_3(Epsilon,d_xi) - ddet_fwd_3(Phi,d_et));
-    U_pred=zeros(4,nx,ny);
-    for e=1:4
-        U_pred(e,:,:)=squeeze(Upsilon_pred(e,:,:))./J;
+    Upsilon_pred = Upsilon + dt*(-ddxi_fwd_3(Eps,d_xi) - ddet_fwd_3(Phi,d_et));
+    for j = 1:4
+        U_pred(j,:,:) = squeeze(Upsilon_pred(j,:,:))./J;
     end
     % Get required primitive variables back from U_pred
     [~, u_pred, v_pred, T_pred, P_pred, ~, ~] = cons2prim(U_pred,R,cv);
@@ -188,17 +188,15 @@ for i = 1:num_steps
     [E_pred, F_pred] = ...
         calc_EF_corr(U_pred,u_pred,v_pred,P_pred,T_pred,cp,Pr,d_xi,d_et,xi_x,et_x,et_y,xi_y);
     % Get script E_pred and F_pred
-    Epsilon_pred = zeros(size(E_pred));
-    Phi_pred = zeros(size(F_pred));
-    for e=1:4
-          Epsilon_pred(e,:,:)=squeeze(E_pred(e,:,:)).*y_et - x_et.*squeeze(F_pred(e,:,:));
-          Phi_pred(e,:,:)=-y_xi.*squeeze(E_pred(e,:,:)) + x_xi.*squeeze(F_pred(e,:,:));
+    for j = 1:4
+        Eps_pred(j,:,:) =  y_et.*squeeze(E_pred(j,:,:)) - x_et.*squeeze(F_pred(j,:,:));
+        Phi_pred(j,:,:) = -y_xi.*squeeze(E_pred(j,:,:)) + x_xi.*squeeze(F_pred(j,:,:));
     end
     
     % Calculate U
-    Upsilon = 0.5*(Upsilon + Upsilon_pred) + dt/2*(-ddxi_bwd_3(Epsilon_pred,d_xi) - ddet_bwd_3(Phi_pred,d_et));
-    for e=1:4
-        U(e,:,:)=squeeze(Upsilon(e,:,:))./J;
+    Upsilon = 0.5*(Upsilon + Upsilon_pred) + dt/2*(-ddxi_bwd_3(Eps_pred,d_xi) - ddet_bwd_3(Phi_pred,d_et));
+    for j = 1:4
+        U(j,:,:) = squeeze(Upsilon(j,:,:))./J;
     end
     
     % Get required primitive variables back from U
