@@ -163,17 +163,15 @@ for i = 1:num_steps
     % ======================= Calculate predictor step ======================= %
     % Get value of E and F
     [E, F] = calc_EF_pred(U,u,v,P,T,cp,Pr,d_xi,d_et,xi_x,et_x,et_y,xi_y);
-    % Get script E and F
+    % Get script E, F, and U
     for j = 1:4
-          Eps(j,:,:)=  y_et.*squeeze(E(j,:,:)) - x_et.*squeeze(F(j,:,:));
-          Phi(j,:,:)= -y_xi.*squeeze(E(j,:,:)) + x_xi.*squeeze(F(j,:,:));
-    end
-    % Get script U
-    for j = 1:4
-        Upsilon(j,:,:)= J.*squeeze(U(j,:,:));
+        Eps(j,:,:) =  y_et.*squeeze(E(j,:,:)) - x_et.*squeeze(F(j,:,:));
+        Phi(j,:,:) = -y_xi.*squeeze(E(j,:,:)) + x_xi.*squeeze(F(j,:,:));
+        Upsilon(j,:,:) = J.*squeeze(U(j,:,:));
     end
     % Calculate Upsilon_pred
     Upsilon_pred = Upsilon + dt*(-ddxi_fwd_3(Eps,d_xi) - ddet_fwd_3(Phi,d_et));
+    % Get U_pred from Upsilon_pred
     for j = 1:4
         U_pred(j,:,:) = squeeze(Upsilon_pred(j,:,:))./J;
     end
@@ -183,6 +181,10 @@ for i = 1:num_steps
     [u_pred, v_pred, P_pred, T_pred, U_pred] = ...
         apply_BCs(u_pred, v_pred, P_pred, T_pred, R, cv, u_inf, P_inf, ...
                   T_inf, AdiabaticWallFlag);
+    % Update Upsilon_pred to reflect applied BCs
+    for j = 1:4
+        Upsilon_pred(j,:,:) = J.*squeeze(U_pred(j,:,:));
+    end
     % ======================= Calculate corrector step ======================= %
     % Get value of E and F
     [E_pred, F_pred] = ...
@@ -192,13 +194,12 @@ for i = 1:num_steps
         Eps_pred(j,:,:) =  y_et.*squeeze(E_pred(j,:,:)) - x_et.*squeeze(F_pred(j,:,:));
         Phi_pred(j,:,:) = -y_xi.*squeeze(E_pred(j,:,:)) + x_xi.*squeeze(F_pred(j,:,:));
     end
-    
-    % Calculate U
+    % Calculate Upsilon
     Upsilon = 0.5*(Upsilon + Upsilon_pred) + dt/2*(-ddxi_bwd_3(Eps_pred,d_xi) - ddet_bwd_3(Phi_pred,d_et));
+    % Get U from Upsilon
     for j = 1:4
         U(j,:,:) = squeeze(Upsilon(j,:,:))./J;
     end
-    
     % Get required primitive variables back from U
     [~, u, v, T, P, ~, ~] = cons2prim(U,R,cv);
     % Apply BC's to all variables
