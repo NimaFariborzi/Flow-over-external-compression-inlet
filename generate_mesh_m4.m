@@ -20,22 +20,18 @@ clc; clear; close all
 % ======================== %
 
 % Angles
-delta1 = 10.405; % Ramp angle 1
-delta2 = 21.539; % Ramp angle 2
+delta1 = 16.1345; % Ramp angle 1
+delta2 = 22.1015; % Ramp angle 2
 
 % Distances
 x1_dist = 1;             % Length of block 1
-x2_x1   = 1.9021;        % Ratio of block 1 length to block 2
+x2_x1   = 0.8211;        % Ratio of block 1 length to block 2
 x2_dist = x1_dist*x2_x1; % Length of block 2
-x3_dist = 2;             % Length of block 3
+x3_dist = 1;             % Length of block 3
 
-y1_x1   = 2.0485;        % Ratio of block 1 height to length
+y1_x1   = 0.9144;        % Ratio of block 1 height to length
 y1_dist = x1_dist*y1_x1; % Height of blocks 1,2,3
-y2_dist = 2;             % Height of blocks 4,5
-
-% Don't touch the ratios, works pretty good as is to keep cell spacing in the
-% physical grid fairly uniform, but might get weird if changed much further from
-% a value of ~2 for each ratio
+y2_dist = 1;             % Height of blocks 4,5
 
 % Computational grid scale
 gs = 2.5e-6;
@@ -45,7 +41,7 @@ d_xi = 0.050 * gs; % Grid spacing in xi
 d_et = 0.025 * gs; % Grid spacing in eta
 
 % Grid stretching
-alpha = 0.9;
+alpha = 0.8;
 
 % ======================== %
 % BLOCK CONSTRUCTION       %
@@ -68,7 +64,7 @@ for i = 1:length(xi1)
 end
 
 % Block two: computational grid
-xi2 = 1*gs:d_xi:3*gs;
+xi2 = 1*gs:d_xi:2*gs;
 et2 = 0:d_et:1*gs; % Brutus?
 [XI2, ET2] = ndgrid(xi2,et2);
 
@@ -84,7 +80,7 @@ for i = 1:length(xi2)
 end
 
 % Block three: computational grid
-xi3 = 3*gs:d_xi:5*gs;
+xi3 = 2*gs:d_xi:3*gs;
 et3 = 0:d_et:1*gs;
 [XI3, ET3] = ndgrid(xi3,et3);
 
@@ -114,7 +110,7 @@ for i = 1:length(xi4)
 end
 
 % Block five: computational grid
-xi5 = 1*gs:d_xi:3*gs;
+xi5 = 1*gs:d_xi:2*gs;
 et5 = 1*gs:d_et:2.2*gs;
 [XI5, ET5] = ndgrid(xi5,et5);
 
@@ -129,7 +125,7 @@ for i = 1:length(xi5)
 end
 
 % Block six: computational grid
-xi6 = 3*gs:d_xi:5*gs;
+xi6 = 2*gs:d_xi:3*gs;
 et6 = 1*gs:d_et:2.2*gs;
 [XI6, ET6] = ndgrid(xi6,et6);
 
@@ -190,7 +186,7 @@ axis equal tight
 
 nx = size(X,1);
 ny = size(X,2);
-save('mesh.mat','XI','ET','X','Y','d_xi','d_et','nx','ny')
+save('mesh4.mat','XI','ET','X','Y','d_xi','d_et','nx','ny')
 
 function y = TwoWayBiasY(y,y_min,y_max,alpha)
     n = length(y);
