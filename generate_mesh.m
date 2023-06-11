@@ -185,7 +185,9 @@ xlabel('$x$')
 ylabel('$y$')
 axis equal tight
 
-save('mesh.mat','XI','ET','X','Y','d_xi','d_et')
+nx = size(X,1);
+ny = size(X,2);
+save('mesh.mat','XI','ET','X','Y','d_xi','d_et','nx','ny')
 
 function y = TwoWayBiasY(y,y_min,y_max,alpha)
     n = length(y);
