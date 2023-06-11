@@ -38,7 +38,7 @@ y2_dist = 2;             % Height of blocks 4,5
 % a value of ~2 for each ratio
 
 % Computational grid scale
-gs = 1e-5;
+gs = 2.5e-6;
 
 % Grid spacing
 d_xi = 0.1  * gs; % Grid spacing in xi
