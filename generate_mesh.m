@@ -41,8 +41,8 @@ y2_dist = 2;             % Height of blocks 4,5
 gs = 2.5e-6;
 
 % Grid spacing
-d_xi = 0.1  * gs; % Grid spacing in xi
-d_et = 0.05 * gs; % Grid spacing in eta
+d_xi = 0.050 * gs; % Grid spacing in xi
+d_et = 0.025 * gs; % Grid spacing in eta
 
 % Grid stretching
 alpha = 0.9;

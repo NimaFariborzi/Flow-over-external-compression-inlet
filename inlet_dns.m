@@ -25,7 +25,7 @@ AdiabaticWallFlag = false;
 
 % Time controls
 t = 0;
-dt = 2.35e-11;
+dt = 1e-11;
 num_steps = 1500;
 
 % Allocate solution arrays
