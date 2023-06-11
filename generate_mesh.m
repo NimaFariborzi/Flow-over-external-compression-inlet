@@ -31,7 +31,7 @@ x3_dist = 2;             % Length of block 3
 
 y1_x1   = 2.0485;        % Ratio of block 1 height to length
 y1_dist = x1_dist*y1_x1; % Height of blocks 1,2,3
-y2_dist = 2;             % Height of blocks 4,5
+y2_dist = 2.05;             % Height of blocks 4,5
 
 % Don't touch the ratios, works pretty good as is to keep cell spacing in the
 % physical grid fairly uniform, but might get weird if changed much further from
@@ -45,7 +45,7 @@ d_xi = 0.050 * gs; % Grid spacing in xi
 d_et = 0.025 * gs; % Grid spacing in eta
 
 % Grid stretching
-alpha = 0.9;
+alpha = 0.85;
 
 % ======================== %
 % BLOCK CONSTRUCTION       %
@@ -100,7 +100,7 @@ end
 
 % Block four: computational grid
 xi4 = 0:d_xi:1*gs;
-et4 = 1*gs:d_et:2.2*gs;
+et4 = 1*gs:d_et:2.5*gs;
 [XI4, ET4] = ndgrid(xi4,et4);
 
 % Block four: physical grid
@@ -115,7 +115,7 @@ end
 
 % Block five: computational grid
 xi5 = 1*gs:d_xi:3*gs;
-et5 = 1*gs:d_et:2.2*gs;
+et5 = 1*gs:d_et:2.5*gs;
 [XI5, ET5] = ndgrid(xi5,et5);
 
 % Block five: physical grid
@@ -130,7 +130,7 @@ end
 
 % Block six: computational grid
 xi6 = 3*gs:d_xi:5*gs;
-et6 = 1*gs:d_et:2.2*gs;
+et6 = 1*gs:d_et:2.5*gs;
 [XI6, ET6] = ndgrid(xi6,et6);
 
 % Block six: physical grid

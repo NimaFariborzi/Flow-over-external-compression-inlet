@@ -9,7 +9,7 @@ load('./mesh.mat')
 load('./mesh_metrics.mat')
 
 % Define parameters
-M_inf = 2;
+M_inf = 3;
 T_inf = 288.15; % K, STP
 P_inf = 101.3e3; % Pa, STP
 cp = 1005; % J/(kg K)
@@ -26,7 +26,7 @@ AdiabaticWallFlag = false;
 % Time controls
 t = 0;
 dt = 1e-11;
-num_steps = 3000;
+num_steps = 6000;
 
 % Allocate solution arrays
 u = zeros(nx,ny); % x-velocity
@@ -149,7 +149,7 @@ axis equal tight
 f2 = figure(2);
 f2.WindowState = 'normal';
 % Make invisible point to force axes to semilogy
-semilogy(1,'o','MarkerEdgeColor','none')
+semilogy(1e-1,'o','MarkerEdgeColor','none')
 xlabel('Step')
 ylabel('Relative Difference in $\rho$')
 title('Convergence')
