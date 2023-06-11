@@ -1,9 +1,6 @@
 % Function to apply BC's to primitive variables
-function [u, v, P, T, U] = apply_BCs(u, v, P, T, R, cv, u_inf, P_inf, T_inf, ...
+function [u, v, P, T, U] = apply_BCs_flat(u, v, P, T, R, cv, u_inf, P_inf, T_inf, ...
                                      AdiabaticWallFlag)
-    
-    % NEEDS MODIFICATION
-
     % Inlet
     u(1,:) = u_inf;
     v(1,:) = 0; % Accounts for leading edge as well
