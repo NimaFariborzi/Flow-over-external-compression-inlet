@@ -1,7 +1,7 @@
 clc; clear; close all
 
 % Load mesh and functions
-load('mesh.mat')
+load('mesh4.mat')
 addpath('./functions/')
 
 % TODO: HANDLE ONE-SIDED DIFFERENCES ABOVE/BELOW INTAKE WALL
@@ -22,4 +22,4 @@ xi_y = -x_et./J;
 et_y =  x_xi./J;
 
 % Export results
-save('mesh_metrics.mat','x_xi','y_xi','x_et','y_et','xi_x','et_x','xi_y','et_y','J')
+save('mesh4_metrics.mat','x_xi','y_xi','x_et','y_et','xi_x','et_x','xi_y','et_y','J')

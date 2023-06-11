@@ -29,19 +29,19 @@ x2_x1   = 0.8211;        % Ratio of block 1 length to block 2
 x2_dist = x1_dist*x2_x1; % Length of block 2
 x3_dist = 1;             % Length of block 3
 
-y1_x1   = 0.9144;        % Ratio of block 1 height to length
+y1_x1   = 1.2;        % Ratio of block 1 height to length
 y1_dist = x1_dist*y1_x1; % Height of blocks 1,2,3
 y2_dist = 1;             % Height of blocks 4,5
 
 % Computational grid scale
-gs = 2.5e-6;
+gs = 3.6e-6;
 
 % Grid spacing
 d_xi = 0.050 * gs; % Grid spacing in xi
 d_et = 0.025 * gs; % Grid spacing in eta
 
 % Grid stretching
-alpha = 0.8;
+alpha = 0.5;
 
 % ======================== %
 % BLOCK CONSTRUCTION       %

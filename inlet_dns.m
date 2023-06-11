@@ -9,7 +9,7 @@ load('./mesh.mat')
 load('./mesh_metrics.mat')
 
 % Define parameters
-M_inf = 4;
+M_inf = 2;
 T_inf = 288.15; % K, STP
 P_inf = 101.3e3; % Pa, STP
 cp = 1005; % J/(kg K)
