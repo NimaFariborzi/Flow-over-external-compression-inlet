@@ -26,7 +26,7 @@ AdiabaticWallFlag = false;
 % Time controls
 t = 0;
 dt = 1e-11;
-num_steps = 1500;
+num_steps = 3000;
 
 % Allocate solution arrays
 u = zeros(nx,ny); % x-velocity
@@ -55,7 +55,7 @@ T(:,:) = T_inf;
 axis_FS = 20;
 cb_FS = 25;
 title_FS = 30;
-plot_frequency = 25;
+plot_frequency = 50;
 
 % Create solution visualizations
 figure(1)
