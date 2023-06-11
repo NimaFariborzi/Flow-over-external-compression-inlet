@@ -1,11 +1,20 @@
 clc; clear; close all
 
-delta1 = 10.405;
-beta1 = 39.758;
-alpha1 = beta1 - delta1;
+% Original ramp for M = 2
+% delta1 = 10.405;
+% beta1 = 39.758;
+% 
+% delta2 = 21.539;
+% beta2 = 51.898;
 
-delta2 = 21.539;
-beta2 = 51.898;
+% Modified ramp for M = 4
+delta1 = 16.1345;
+beta1 = 28.2389;
+
+delta2 = 22.1015;
+beta2 = 41.6599;
+
+alpha1 = beta1 - delta1;
 alpha2 = beta2 - delta2;
 
 gamma1 = 180 - beta2 + delta1;
