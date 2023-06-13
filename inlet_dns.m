@@ -5,8 +5,8 @@ clc; clear; close all
 addpath('./functions/')
 
 % Load mesh and metrics
-load('./mesh.mat')
-load('./mesh_metrics.mat')
+load('./mesh3.mat')
+load('./mesh3_metrics.mat')
 
 % Define parameters
 M_inf = 3;

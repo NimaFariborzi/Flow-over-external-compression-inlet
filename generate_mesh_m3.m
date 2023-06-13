@@ -43,8 +43,8 @@ gs = 6.3e-6;
 x_int = 1.9670*x1_dist*gs; % x-location of shock intersection  
 
 % Grid spacing
-d_xi = 0.05 * gs; % Grid spacing in xi
-d_et = 0.05 * gs; % Grid spacing in eta
+d_xi = 0.025 * gs; % Grid spacing in xi
+d_et = 0.025 * gs; % Grid spacing in eta
 
 % Grid stretching
 alpha1 = 0.85;
