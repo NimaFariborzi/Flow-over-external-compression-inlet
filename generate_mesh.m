@@ -31,7 +31,7 @@ x3_dist = 2;             % Length of block 3
 
 y1_x1   = 2.0485;        % Ratio of block 1 height to length
 y1_dist = x1_dist*y1_x1; % Height of blocks 1,2,3
-y2_dist = 2.05;             % Height of blocks 4,5
+y2_dist = 2.05;          % Height of blocks 4,5
 
 % Don't touch the ratios, works pretty good as is to keep cell spacing in the
 % physical grid fairly uniform, but might get weird if changed much further from
@@ -39,6 +39,8 @@ y2_dist = 2.05;             % Height of blocks 4,5
 
 % Computational grid scale
 gs = 2.5e-6;
+
+x_int = 2.4624*x1_dist*gs; % x-location of shock intersection  
 
 % Grid spacing
 d_xi = 0.050 * gs; % Grid spacing in xi
@@ -157,6 +159,11 @@ Y =  [Y1,           Y4(:,2:end);
       Y2(2:end,:),  Y5(2:end,2:end);
       Y3(2:end,:),  Y6(2:end,2:end)];
 
+% Get row and col num of inlet cowl
+cowl_cols = [size(X1,2), size(X1,2)+1];
+x = X(:,1);
+cowl_rows = find(x>x_int,1):size(X,1);
+
 % Plot
 tiledlayout(1,2)
 % Computational grid
@@ -182,6 +189,8 @@ plot(X3(:),Y3(:),'.','MarkerSize',15)
 plot(X4(:),Y4(:),'.','MarkerSize',15)
 plot(X5(:),Y5(:),'.','MarkerSize',15)
 plot(X6(:),Y6(:),'.','MarkerSize',15)
+% Plot cowl
+plot(X(cowl_rows,cowl_cols),Y(cowl_rows,cowl_cols),'k.','MarkerSize',15)
 % plot(X(:),Y(:),'.','MarkerSize',15)
 title('Physical Grid')
 xlabel('$x$')
