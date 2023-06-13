@@ -200,7 +200,8 @@ axis equal tight
 
 nx = size(X,1);
 ny = size(X,2);
-save('mesh.mat','XI','ET','X','Y','d_xi','d_et','nx','ny')
+save('mesh3.mat','XI','ET','X','Y','d_xi','d_et','nx','ny',...
+     'cowl_cols','cowl_rows')
 
 function y = TwoWayBiasY(y,y_min,y_max,alpha)
     n = length(y);
