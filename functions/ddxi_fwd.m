@@ -1,4 +1,4 @@
-function dfdxi = ddxi_fwd(f,dxi)
+function dfdxi = ddxi_fwd(f,dxi,varargin)
 %DDX_FWD Computes first derivative of f in xi using first-order forward
 %differencing.
 %   DDX_FWD(f,dxi) computes the partial derivative of 2D array f in xi with 
@@ -11,4 +11,16 @@ function dfdxi = ddxi_fwd(f,dxi)
     dfdxi(1:end-1,:) = (f(2:end,:) - f(1:end-1,:))/dxi;
     % Use backward difference at the right edge
     dfdxi(end,:) = (f(end,:) - f(end-1,:))/dxi;
+
+    if nargin < 4
+        return
+    end
+    cowl_rows = varargin{1};
+    cowl_cols = varargin{2};
+    % Use backward differencing on cowl left edge, if location provided
+    i = cowl_rows(1);
+    for j = cowl_cols
+        dfdxi(i,j) = (f(i,j) - f(i-1,j))/dxi;
+    end
+
 end
