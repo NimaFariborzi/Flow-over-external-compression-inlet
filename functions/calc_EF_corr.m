@@ -11,7 +11,7 @@ function [E, F] = calc_EF_corr(U,u,v,P,T,cp,Pr,d_xi,d_et,xi_x,et_x,et_y,xi_y)
     tau_xx = mu.*(4/3*ddx(u,xi_x,et_x,d_xi,d_et,'fwd','cnt') - 2/3*ddy(v,xi_y,et_y,d_xi,d_et,'fwd','cnt'));
     tau_yy = mu.*(4/3*ddy(v,xi_y,et_y,d_xi,d_et,'cnt','fwd') - 2/3*ddx(u,xi_x,et_x,d_xi,d_et,'cnt','fwd'));
     % Calculate shear stresses (different for E and F due to finite differences)
-     tau_xy_E = mu.*(ddy(u,xi_y,et_y,d_xi,d_et,'fwd','cnt') + ddx(v,xi_x,et_x,d_xi,d_et,'fwd','cnt'));
+    tau_xy_E = mu.*(ddy(u,xi_y,et_y,d_xi,d_et,'fwd','cnt') + ddx(v,xi_x,et_x,d_xi,d_et,'fwd','cnt'));
     tau_xy_F = mu.*(ddx(v,xi_x,et_x,d_xi,d_et,'cnt','fwd') + ddy(u,xi_y,et_y,d_xi,d_et,'cnt','fwd'));
     % Calculate heat fluxes
     q_x = -k.*ddx(T,xi_x,et_x,d_xi,d_et,'fwd','cnt');
