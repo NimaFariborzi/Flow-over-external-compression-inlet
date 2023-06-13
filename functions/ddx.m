@@ -1,4 +1,4 @@
-function dfdx = ddx(f,xi_x,et_x,dxi,det,xi_dir,et_dir)
+function dfdx = ddx(f,xi_x,et_x,dxi,det,xi_dir,et_dir,varargin)
 %DDX Computes first derivative of f in x on transformed grids.
 %   DDX(f,xi_x,et_x,d_xi,d_et,xi_dir,et_dir) computes the partial derivative of
 %   2D array f in x using grid transformations defined by xi_x and et_x with
@@ -28,6 +28,6 @@ function dfdx = ddx(f,xi_x,et_x,dxi,det,xi_dir,et_dir)
     end
 
     % Perform differencing
-    dfdx = xi_x .* ddxi(f,dxi) + et_x .* ddet(f,det);
+    dfdx = xi_x .* ddxi(f,dxi,varargin{:}) + et_x .* ddet(f,det,varargin{:});
 
 end

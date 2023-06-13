@@ -1,4 +1,4 @@
-function dfdy = ddy(f,xi_y,et_y,dxi,det,xi_dir,et_dir)
+function dfdy = ddy(f,xi_y,et_y,dxi,det,xi_dir,et_dir,varargin)
 %DDY Computes first derivative of f in y on transformed grids.
 %   DDY(f,xi_y,et_y,d_xi,d_et,xi_dir,et_dir) computes the partial derivative of
 %   2D array f in y using grid transformations defined by xi_y and et_y with
@@ -28,6 +28,6 @@ function dfdy = ddy(f,xi_y,et_y,dxi,det,xi_dir,et_dir)
     end
 
     % Perform differencing
-    dfdy = xi_y .* ddxi(f,dxi) + et_y .* ddet(f,det);
+    dfdy = xi_y .* ddxi(f,dxi,varargin{:}) + et_y .* ddet(f,det,varargin{:});
 
 end
