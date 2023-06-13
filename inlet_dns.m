@@ -48,7 +48,7 @@ P(:,:) = P_inf;
 T(:,:) = T_inf;
 
 % Apply BC's
-[u, v, P, T, U] = apply_BCs_inlet(u, v, P, T, R, cv, u_inf, P_inf, T_inf, X, Y);
+[u, v, P, T, U] = apply_BCs_inlet(u, v, P, T, R, cv, u_inf, P_inf, T_inf, X, Y, cowl_rows, cowl_cols);
 [~,~,~,~,~,e,~] = cons2prim(U,R,cv); % Get e for plotting
 
 % Visualization parameters
@@ -180,7 +180,7 @@ for i = 1:num_steps
     % Apply BC's to all predictor variables
     [u_pred, v_pred, P_pred, T_pred, U_pred] = ...
         apply_BCs_inlet(u_pred, v_pred, P_pred, T_pred, R, cv, u_inf, P_inf, ...
-                  T_inf, X, Y);
+                  T_inf, X, Y, cowl_rows, cowl_cols);
     % Update Upsilon_pred to reflect applied BCs
     for j = 1:4
         Upsilon_pred(j,:,:) = J.*squeeze(U_pred(j,:,:));
@@ -203,7 +203,7 @@ for i = 1:num_steps
     % Get required primitive variables back from U
     [~, u, v, T, P, ~, ~] = cons2prim(U,R,cv);
     % Apply BC's to all variables
-    [u, v, P, T, U] = apply_BCs_inlet(u, v, P, T, R, cv, u_inf, P_inf, T_inf, X, Y);
+    [u, v, P, T, U] = apply_BCs_inlet(u, v, P, T, R, cv, u_inf, P_inf, T_inf, X, Y, cowl_rows, cowl_cols);
     % ================================= Done! ================================ %
     % Compute convergence via max relative change in density
     max_diff_rel = max(abs((U(1,:,:) - U_old(1,:,:))./U(1,:,:)),[],'all');

@@ -1,5 +1,5 @@
 % Function to apply BC's to primitive variables
-function [u, v, P, T, U] = apply_BCs_inlet(u, v, P, T, R, cv, u_inf, P_inf, T_inf, X, Y)
+function [u, v, P, T, U] = apply_BCs_inlet(u, v, P, T, R, cv, u_inf, P_inf, T_inf, X, Y, cowl_rows, cowl_cols)
 
     % Inlet and far-field are same as they were for flat plate, since they
     % are Dirichlet BC's
@@ -47,7 +47,6 @@ function [u, v, P, T, U] = apply_BCs_inlet(u, v, P, T, R, cv, u_inf, P_inf, T_in
         % Choose appropriate y scale as distance to two points ABOVE wall
         ys = y4 - y1;
         % Get location on line normal from wall
-        % TODO: USE PROPER NORMAL ANGLE BASED ON X-LOCATION
         ang = atan2d(y1 - Y(i-1,1),x1 - X(i-1,1));
         x2 = x1 - ys*tand(ang);
         y2 = y1 + ys;
@@ -75,7 +74,26 @@ function [u, v, P, T, U] = apply_BCs_inlet(u, v, P, T, R, cv, u_inf, P_inf, T_in
         P(i,1) = P1 - d1/d2*(P2 - P1);
     end
 
-    % TODO: ADD INLET COWL BC'S
+    % Apply BC's on cowl
+    u(cowl_rows,cowl_cols) = 0;
+    v(cowl_rows,cowl_cols) = 0;
+    % I guess we don't really need to prescribe temp on cowl...?
+    % but could extrapolate same as pressure if needed
+
+    % Pressure on underside of cowl gets extrapolated below
+    j1 = cowl_cols(1);
+    for i = cowl_rows(2:end)
+        d1 = norm([X(i,j1)-X(i,j1-1), Y(i,j1)-Y(i,j1-1)]);
+        d2 = norm([X(i,j1-1)-X(i,j1-2), Y(i,j1-1)-Y(i,j1-2)]);
+        P(i,j1) = P(i,j1-1) - d2/d1*(P(i,j1-2) - P(i,j1-1));
+    end
+    % Pressure on topside of cowl gets extrapolated above
+    j2 = cowl_cols(2);
+    for i = cowl_rows(2:end)
+        d1 = norm([X(i,j2)-X(i,j2+1), Y(i,j2)-Y(i,j2+1)]);
+        d2 = norm([X(i,j2+1)-X(i,j2+2), Y(i,j2+1)-Y(i,j2+2)]);
+        P(i,j2) = P(i,j2+1) - d2/d1*(P(i,j2+2) - P(i,j2+1));
+    end
     
     % Apply changes to the primitive variables to the conservatives
     rho = P./(R*T);
