@@ -4,6 +4,9 @@ function dfdet = ddet_bwd(f,det)
 %   DDY_BWD(f,det) computes the partial derivative of 2D array f in eta with 
 %   constant grid spacing det between points.
 
+    % TODO: IMPLEMENT ONE-SIDED DIFFERENCE IN ALL DDXI/DDET FUNCTIONS FOR INLET
+    % COWL
+
     % Initialize dfdet array to same size as f
     dfdet = zeros(size(f));
     % Compute dfdet with first-order backward difference at all points above the

@@ -74,6 +74,8 @@ function [u, v, P, T, U] = apply_BCs_inlet(u, v, P, T, R, cv, u_inf, P_inf, T_in
         % Extrapolate pressure to wall
         P(i,1) = P1 - d1/d2*(P2 - P1);
     end
+
+    % TODO: ADD INLET COWL BC'S
     
     % Apply changes to the primitive variables to the conservatives
     rho = P./(R*T);
