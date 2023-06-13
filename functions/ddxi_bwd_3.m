@@ -11,4 +11,7 @@ function dfdxi = ddxi_bwd_3(f,dxi)
     dfdxi(:,2:end,:) = (f(:,2:end,:) - f(:,1:end-1,:))/dxi;
     % Use forward difference at the left edge
     dfdxi(:,1,:) = (f(:,2,:) - f(:,1,:))/dxi;
+
+    % Actually no difference due to cowl for ddxi_bwd since already using
+    % backward differencing
 end
