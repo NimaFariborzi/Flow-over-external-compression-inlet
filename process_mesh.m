@@ -8,20 +8,9 @@ addpath('./functions/')
 x_xi = ddxi_central(X,d_xi);
 y_xi = ddxi_central(Y,d_xi);
 x_et = ddet_central(X,d_et);
-y_et = ddet_central(Y,d_et);
-
-% Use one-sided differences in eta at cowl top/bottom
-% NB: Only actually need to correct y_et (x_et is zero either way)
-j = cowl_cols(1); % Underside of cowl
-for i = cowl_rows
-    % Backward difference
-    y_et(i,j) = (3*Y(i,j) - 4*Y(i,j-1) + Y(i,j-2))/(2*d_et);
-end
-j = cowl_cols(2); % Topside of cowl
-for i = cowl_rows
-    % Forward difference
-    y_et(i,j) = (-3*Y(i,j) + 4*Y(i,j+1) - Y(i,j+2))/(2*d_et);
-end
+y_et = ddet_central(Y,d_et,cowl_rows,cowl_cols);
+% NB: Only actually need to correct y_et with one-sided differences at the cowl
+% since x_et is zero either way, and xi won't have any difference
 
 % Calcualte Jacobian
 J = x_xi.*y_et - x_et.*y_xi;
