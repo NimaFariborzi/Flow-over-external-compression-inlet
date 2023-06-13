@@ -1,4 +1,4 @@
-function dfdxi = ddxi_bwd_3(f,dxi)
+function dfdxi = ddxi_bwd_3(f,dxi,varargin)
 %DDX_BWD_3 Computes first derivative of f in xi using first-order backward
 %differencing for state-space arrays of 3 dimensions.
 %   DDX_BWD_3(f,dxi) computes the partial derivative of 3D array f in xi with 
