@@ -83,14 +83,14 @@ function [u, v, P, T, U] = apply_BCs_inlet(u, v, P, T, R, cv, u_inf, P_inf, T_in
 
     % Pressure on underside of cowl gets extrapolated below
     j1 = cowl_cols(1);
-    for i = cowl_rows(2:end)
+    for i = cowl_rows(2:end-1)
         d1 = norm([X(i,j1)-X(i,j1-1), Y(i,j1)-Y(i,j1-1)]);
         d2 = norm([X(i,j1-1)-X(i,j1-2), Y(i,j1-1)-Y(i,j1-2)]);
         P(i,j1) = P(i,j1-1) - d2/d1*(P(i,j1-2) - P(i,j1-1));
     end
     % Pressure on topside of cowl gets extrapolated above
     j2 = cowl_cols(2);
-    for i = cowl_rows(2:end)
+    for i = cowl_rows(2:end-1)
         d1 = norm([X(i,j2)-X(i,j2+1), Y(i,j2)-Y(i,j2+1)]);
         d2 = norm([X(i,j2+1)-X(i,j2+2), Y(i,j2+1)-Y(i,j2+2)]);
         P(i,j2) = P(i,j2+1) - d2/d1*(P(i,j2+2) - P(i,j2+1));

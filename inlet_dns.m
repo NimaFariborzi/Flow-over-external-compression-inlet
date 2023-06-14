@@ -26,7 +26,7 @@ AdiabaticWallFlag = false;
 % Time controls
 t = 0;
 dt = 1e-11;
-num_steps = 10000;
+num_steps = 9000;
 
 % Allocate solution arrays
 u = zeros(nx,ny); % x-velocity
