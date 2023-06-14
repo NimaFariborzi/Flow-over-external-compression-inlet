@@ -77,8 +77,9 @@ function [u, v, P, T, U] = apply_BCs_inlet(u, v, P, T, R, cv, u_inf, P_inf, T_in
     % Apply BC's on cowl
     u(cowl_rows,cowl_cols) = 0;
     v(cowl_rows,cowl_cols) = 0;
-    % I guess we don't really need to prescribe temp on cowl...?
-    % but could extrapolate same as pressure if needed
+    T(cowl_rows,cowl_cols) = 500; % Why?? Because it crashes if you try to
+    % extrapolate or set adiabatic, and this is roughly the temp at which it is
+    % adiabatic anyway...
 
     % Pressure on underside of cowl gets extrapolated below
     j1 = cowl_cols(1);

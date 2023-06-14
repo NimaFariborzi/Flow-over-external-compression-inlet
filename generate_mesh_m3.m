@@ -31,11 +31,7 @@ x3_dist = 1;             % Length of block 3
 
 y1_x1   = 1.2395;        % Ratio of block 1 height to length
 y1_dist = x1_dist*y1_x1; % Height of blocks 1,2,3
-y2_dist = 1.5;          % Height of blocks 4,5
-
-% Don't touch the ratios, works pretty good as is to keep cell spacing in the
-% physical grid fairly uniform, but might get weird if changed much further from
-% a value of ~2 for each ratio
+y2_dist = 1.5;           % Height of blocks 4,5
 
 % Computational grid scale
 gs = 6.3e-6;
@@ -43,7 +39,8 @@ gs = 6.3e-6;
 x_int = 1.9670*x1_dist*gs; % x-location of shock intersection  
 
 % Grid spacing
-d_xi = 0.025 * gs; % Grid spacing in xi
+% d_xi = 0.01 * gs; % Grid spacing in xi
+d_xi = 0.025 * gs;
 d_et = 0.025 * gs; % Grid spacing in eta
 
 % Grid stretching
@@ -78,6 +75,12 @@ et2 = 0:d_et:1.25*gs; % Brutus?
 % Block two: physical grid
 X2 = rescale(XI2,x1_dist*gs,(x1_dist + x2_dist)*gs);
 Y2 = zeros(size(ET2));
+
+x_min = min(X2,[],"all");
+x_max = max(X2,[],"all");
+for i = 1:length(et2)
+    X2(:,i) = OneWayBiasX(X2(:,i),x_min,x_max);
+end
 
 y_max = y1_dist*gs;
 for i = 1:length(xi2)
@@ -124,6 +127,12 @@ et5 = 1.25*gs:d_et:2.75*gs;
 % Block five: physical grid
 X5 = rescale(XI5,x1_dist*gs,(x1_dist + x2_dist)*gs);
 Y5 = zeros(size(ET5));
+
+x_min = min(X5,[],"all");
+x_max = max(X5,[],"all");
+for i = 1:length(et5)
+    X5(:,i) = OneWayBiasX(X5(:,i),x_min,x_max);
+end
 
 y_min = y1_dist*gs;
 y_max = (y1_dist + y2_dist)*gs;
@@ -217,4 +226,12 @@ function y = OneWayBiasY(y,y_min,y_max,alpha)
     e = -1+j/n;
     y = 1/alpha * tanh(e * atanh(alpha)) + 1;
     y = rescale(y,y_min,y_max);
+end
+
+function x = OneWayBiasX(x,x_min,x_max)
+    n = length(x);
+    j = (1:n)*2*pi;
+    % This is totally ad hoc but works great for this particular mesh...
+    x = sin(j/n-1.55) + 1.8*j/n;
+    x = rescale(x,x_min,x_max);
 end
