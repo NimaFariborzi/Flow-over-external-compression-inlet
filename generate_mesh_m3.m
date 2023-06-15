@@ -40,8 +40,8 @@ x_int = 1.9670*x1_dist*gs; % x-location of shock intersection
 
 % Grid spacing
 % d_xi = 0.01 * gs; % Grid spacing in xi
-d_xi = 0.025 * gs;
-d_et = 0.025 * gs; % Grid spacing in eta
+d_xi = 0.0125 * gs;
+d_et = 0.0125 * gs; % Grid spacing in eta
 
 % Grid stretching
 alpha1 = 0.85;
@@ -207,9 +207,11 @@ xlabel('$x$')
 ylabel('$y$')
 axis equal tight
 
+exportgraphics(gcf,'Mesh.png','Resolution',300)
+
 nx = size(X,1);
 ny = size(X,2);
-save('mesh3.mat','XI','ET','X','Y','d_xi','d_et','nx','ny',...
+save('mesh3_fine.mat','XI','ET','X','Y','d_xi','d_et','nx','ny',...
      'cowl_cols','cowl_rows')
 
 function y = TwoWayBiasY(y,y_min,y_max,alpha)

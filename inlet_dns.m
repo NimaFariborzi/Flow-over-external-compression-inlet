@@ -25,7 +25,7 @@ AdiabaticWallFlag = false;
 
 % Time controls
 t = 0;
-dt = 1e-11;
+dt = 3e-12;
 num_steps = 9000;
 
 % Allocate solution arrays
@@ -50,6 +50,9 @@ T(:,:) = T_inf;
 % Apply BC's
 [u, v, P, T, U] = apply_BCs_inlet(u, v, P, T, R, cv, u_inf, P_inf, T_inf, X, Y, cowl_rows, cowl_cols);
 [~,~,~,~,~,e,~] = cons2prim(U,R,cv); % Get e for plotting
+
+% Optionally, if results from a previous run exist, load them...
+load('results.mat')
 
 % Visualization parameters
 axis_FS = 20;
@@ -225,3 +228,5 @@ for i = 1:num_steps
     end
     U_old = U;
 end
+
+save('results.mat','U','u','v','P','T','t')
